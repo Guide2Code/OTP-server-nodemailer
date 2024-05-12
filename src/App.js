@@ -1,25 +1,31 @@
-import logo from './logo.svg';
 import './App.css';
-
+import {useState} from "react";
+import axios from "axios";
 function App() {
+  const [otp,setOtp] = useState();
+  const [email,setEmail] = useState();
+
+  const verify = async(e)=>{
+    e.preventDefault();
+    try {
+      const res = await axios.put('http://localhost:6800/verify',{otp,email}).then(res=>(console.log(res)));
+      console.log(res);
+    } catch (error) {
+      console.log("Something went wrong")
+      console.log(error)
+    }
+  }
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+     <form onSubmit={verify}>
+      <input type='number' onChange={(e)=>setOtp(e.target.value)} placeholder='otp'/>
+      <input type='text' onChange={(e)=>setEmail(e.target.value)} placeholder='email'/>
+      <input type='submit'/>
+     </form>
     </div>
   );
 }
 
 export default App;
+
+
